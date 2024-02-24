@@ -14,7 +14,9 @@ export const fontSans = FontSans({
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <head />
+      <head>
+        <link data-rh="true" rel="icon" href="favicon.svg"></link>
+      </head>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -22,10 +24,9 @@ export default function RootLayout({ children }) {
         )}
       >
         <User>
-          <Header/>
+          <Header />
           {children}
-          
-          </User>
+        </User>
       </body>
     </html>
   );
