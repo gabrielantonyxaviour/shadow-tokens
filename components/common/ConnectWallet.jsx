@@ -23,7 +23,7 @@ export const ConnectWalletModal = () => {
   return (
     <>
       {isConnected ? (
-        <div className="font-semibold text-2xl mt-5 flex items-center text-[#9f80ff]">
+        <div className="font-semibold text-2xl mt-5 flex items-center purple-text">
           <Link href="/dashboard" className="mr-3">
             Go to Dashboard{" "}
           </Link>{" "}

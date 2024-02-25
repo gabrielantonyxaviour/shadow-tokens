@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BsCollectionFill } from "react-icons/bs";
-import { LuImport } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { sidebarLinks } from "@/data";
 
 const SideBar = ({ address }) => {
   const currentPath = usePathname();
@@ -30,7 +29,7 @@ const SideBar = ({ address }) => {
         </p>
       </div>
 
-      {data.map((item, index) => (
+      {sidebarLinks.map((item, index) => (
         <Link key={index} href={item.route} className=" mb-4">
           <div className={`sidebar-tab ${path === item.route && "active"}`}>
             {item.icon} <p className="ml-3">{item.name} </p>
@@ -42,16 +41,3 @@ const SideBar = ({ address }) => {
 };
 
 export default SideBar;
-
-const data = [
-  {
-    name: "Collection",
-    route: "/dashboard",
-    icon: <BsCollectionFill />,
-  },
-  {
-    name: "Create NFT",
-    route: "/dashboard/create",
-    icon: <LuImport />,
-  },
-];
