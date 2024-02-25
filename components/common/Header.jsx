@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { ConnectWalletNav } from "./ConnectWallet";
+import { navLinks } from "@/data";
 
 const Header = () => {
   return (
@@ -9,10 +10,17 @@ const Header = () => {
         <img src="/images/logo.svg" alt="Shadow Tokens" width={300} />
       </Link>
 
-      {/* <nav>
-        <a href="">Explore</a>
-        <Link href="/dashboard">Dashboard</Link>
-      </nav> */}
+      <nav>
+        {navLinks.map((item, index) => (
+          <Link
+            key={index}
+            href={item.link}
+            className="ml-3 font-semibold hover:text-[#9f80ff]"
+          >
+            {item.title}
+          </Link>
+        ))}
+      </nav>
 
       <div>
         <ConnectWalletNav />

@@ -58,3 +58,15 @@ export const sidebarLinks = [
     icon: <LuImport />,
   },
 ];
+
+export const navLinks = [
+  {
+    title: "Home",
+    link: "/",
+  },
+
+  {
+    title: "Explore",
+    link: "/explore",
+  },
+];

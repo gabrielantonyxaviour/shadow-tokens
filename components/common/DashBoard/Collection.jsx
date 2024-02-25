@@ -11,11 +11,13 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { dummyNFTs } from "@/data";
 
-const Collection = () => {
+const Collection = ({ isDashboard = true }) => {
   return (
     <>
-      <p className="font-semibold text-4xl mb-5">Collection</p>
-      <div className=" grid grid-cols-3 gap-4">
+      {isDashboard && <p className="font-semibold text-4xl mb-5">Collection</p>}
+      <div
+        className={`grid ${isDashboard ? "grid-cols-3" : "grid-cols-4"} gap-4`}
+      >
         {dummyNFTs.map((item, index) => (
           <div key={index}>
             <CardComp
@@ -24,6 +26,7 @@ const Collection = () => {
               title={item.title}
               bid={item.bid}
               chain={item.chain}
+              isDashboard={isDashboard}
             />
           </div>
         ))}
@@ -34,12 +37,10 @@ const Collection = () => {
 
 export default Collection;
 
-const CardComp = ({ img, title, bid, chain, id }) => {
+const CardComp = ({ img, title, bid, chain, id, isDashboard }) => {
   return (
-    <Link href={`/dashboard/${id}`}>
-      <Card
-        className="bg-dark pointer border-0 text-muted-foreground backdrop-blur-sm"
-      >
+    <Link href={`/${isDashboard ? "dashboard" : "explore"}/${id}`}>
+      <Card className="bg-dark pointer border-0 text-muted-foreground backdrop-blur-sm">
         <CardHeader className="overflow-hidden h-[272px]">
           <img
             src={img}
