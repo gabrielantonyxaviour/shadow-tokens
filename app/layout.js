@@ -5,6 +5,8 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { User } from "./userContext";
 import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
+import Wrapper from "@/components/common/Wrapper";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,10 +25,13 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
       >
-        <User>
-          <Header />
-          {children}
-        </User>
+        <Wrapper>
+          <User>
+            <Header />
+            {children}
+            <Footer />
+          </User>
+        </Wrapper>
       </body>
     </html>
   );
