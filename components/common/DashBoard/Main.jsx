@@ -8,9 +8,9 @@ const Main = () => {
   const { address } = useContext(UserContext);
 
   return (
-    <Tabs defaultValue="account" className=" grid grid-cols-3 mx-10">
+    <Tabs defaultValue="account" className=" grid grid-cols-4 mx-10">
       <SideBar address={address} />
-      <TabsContent value="account" className="col-span-2 ">
+      <TabsContent value="account" className="col-span-3 ">
         <div className="ml-5">
           <p className="font-semibold text-4xl mb-5">Collection</p>
           <Collection />
