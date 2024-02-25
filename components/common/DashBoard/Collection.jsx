@@ -50,19 +50,23 @@ const data = [
 
 const Collection = () => {
   return (
-    <div className=" grid grid-cols-3 gap-4">
-      {data.map((item, index) => (
-        <div key={index}>
-          {" "}
-          <CardComp
-            img={item.img}
-            title={item.title}
-            bid={item.bid}
-            chain={item.chain}
-          />{" "}
-        </div>
-      ))}
-    </div>
+    <>
+      {" "}
+      <p className="font-semibold text-4xl mb-5">Collection</p>
+      <div className=" grid grid-cols-3 gap-4">
+        {data.map((item, index) => (
+          <div key={index}>
+            {" "}
+            <CardComp
+              img={item.img}
+              title={item.title}
+              bid={item.bid}
+              chain={item.chain}
+            />{" "}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

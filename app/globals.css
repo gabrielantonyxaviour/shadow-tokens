@@ -123,9 +123,11 @@ body {
   border: 1px solid #d2b7f8;
   color: #d2b7f8;
   padding: 0.5rem 2rem;
+  display: flex;
+  align-items: center;
 }
 
-.sidebar-tab.data-\[state\=active\]\:bg-background[data-state="active"] {
+.sidebar-tab.active {
   background-color: #d2b7f8a6;
   color: #fff;
 }

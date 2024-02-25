@@ -1,11 +1,11 @@
 "use client";
-import DashBoard from "@/components/common/DashBoard";
+import Collection from "@/components/common/DashBoard/Collection";
 import React from "react";
 
 const Page = () => {
   return (
     <>
-      <DashBoard />
+      <Collection />
     </>
   );
 };

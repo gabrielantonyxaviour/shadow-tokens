@@ -1,12 +1,20 @@
-import React from "react";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BsCollectionFill } from "react-icons/bs";
 import { LuImport } from "react-icons/lu";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const SideBar = ({address}) => {
+const SideBar = ({ address }) => {
+  const currentPath = usePathname();
+  const [path, setPath] = useState(currentPath);
+
+  useEffect(() => {
+    setPath(currentPath);
+  }, [path, currentPath]);
+
   return (
-    <TabsList className="flex-col bg-[#8173c131] p-10 h-[500px]">
+    <div className="flex flex-col items-center bg-[#8173c131] p-10 h-[500px]">
       <Avatar className="w-[150px] h-[150px]">
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
@@ -22,14 +30,28 @@ const SideBar = ({address}) => {
         </p>
       </div>
 
-      <TabsTrigger value="account" className="sidebar-tab mb-4">
-        <BsCollectionFill /> <p className="ml-3">Collection</p>
-      </TabsTrigger>
-      <TabsTrigger value="import" className="sidebar-tab mb-4">
-        <LuImport /> <p className="ml-3">Import NFT</p>
-      </TabsTrigger>
-    </TabsList>
+      {data.map((item, index) => (
+        <Link key={index} href={item.route} className=" mb-4">
+          <div className={`sidebar-tab ${path === item.route && "active"}`}>
+            {item.icon} <p className="ml-3">{item.name} </p>
+          </div>
+        </Link>
+      ))}
+    </div>
   );
 };
 
 export default SideBar;
+
+const data = [
+  {
+    name: "Collection",
+    route: "/dashboard",
+    icon: <BsCollectionFill />,
+  },
+  {
+    name: "Create NFT",
+    route: "/dashboard/create",
+    icon: <LuImport />,
+  },
+];
