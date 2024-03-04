@@ -1,5 +1,5 @@
 import React from "react";
-import { ConnectWalletModal, CustomConnectKitButton } from "./ConnectWallet";
+// import { ConnectWalletModal, CustomConnectKitButton } from "./ConnectWallet";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 import { FaExternalLinkAlt } from "react-icons/fa";

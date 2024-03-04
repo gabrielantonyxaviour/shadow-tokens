@@ -28,8 +28,7 @@ export default function RootLayout({ children }) {
       <head>
         <link data-rh="true" rel="icon" href="favicon.svg"></link>
       </head>
-      <body
-      >
+      <body>
         {ready ? (
           <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>

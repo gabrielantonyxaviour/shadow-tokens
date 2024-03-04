@@ -2,7 +2,7 @@ import React from "react";
 
 const Wrapper = ({ children }) => {
   return (
-    <div className="h-[100%] w-[100%] overflow-hidden relative">
+    <div className="h-[100%] w-[100%] overflow-hidden relative min-h-screen">
       {children}
 
       <div className="shape"></div>

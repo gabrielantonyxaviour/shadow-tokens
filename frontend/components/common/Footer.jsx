@@ -1,9 +1,14 @@
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 
 const Footer = () => {
   return (
-    <div>Footer</div>
-  )
-}
+    <center className="my-5 absolute bottom-0 mx-auto w-full">
+      <Link href="/">
+        <img src="/images/logo.svg" alt="Shadow Tokens" width={100} />
+      </Link>
+    </center>
+  );
+};
 
-export default Footer
+export default Footer;

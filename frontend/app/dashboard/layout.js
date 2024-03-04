@@ -9,7 +9,7 @@ export default function DashBoardLayout({ children }) {
       <div className="gradient h-[6rem] mb-10"></div>
       <div defaultValue="account" className="grid grid-cols-4 mx-10">
         <SideBar />
-        <div className="ml-5 col-span-3">{children}</div>
+        <div className="ml-5 col-span-3 mb-16">{children}</div>
       </div>
     </div>
   );
