@@ -1,3 +1,4 @@
+// "use client";
 import React from "react";
 import {
   Card,
@@ -10,8 +11,18 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { dummyNFTs } from "@/data";
+import { connectContract } from "@/lib/contract";
 
-const Collection = ({ isDashboard = true }) => {
+const Collection = ({ isDashboard = true, ethereum }) => {
+  // const [windowEth, setWindowEth] = useState(null);
+  // useEffect(() => {
+  //   const { ethereum } = window;
+  //   setWindowEth(ethereum)
+  // }, [windowEth]);
+
+
+  connectContract(ethereum)
+
   return (
     <>
       {isDashboard && <p className="font-semibold text-4xl mb-5">Collection</p>}
@@ -54,7 +65,7 @@ const CardComp = ({ img, title, bid, chain, id, isDashboard }) => {
         <CardFooter className="mt-4">
           <p>{bid}</p>
           <Button className="gradient ml-5 px-6 font-semibold">
-            Place Bid
+            Add to Vault
           </Button>
         </CardFooter>
       </Card>

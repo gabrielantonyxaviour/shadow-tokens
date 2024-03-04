@@ -38,45 +38,49 @@ export const ConnectWalletModal = () => {
           </Popover.Trigger>
           <Popover.Anchor />
           <Popover.Portal>
-          <Popover.Content side="top">
-            <div className="bg-[#161833f7] w-[60vw] rounded-lg h-[450px] p-10">
-              <p className="text-4xl font-semibold text-center mb-10">
-                Choose Wallet
-              </p>
-              <Separator />
-              <div className="flex justify-around my-10 ">
-                <div
-                  className="gradient-border p-10  pointer flex flex-col items-center w-[200px]"
-                  onClick={() => {
-                    connectKeplrWallet(setAddress, setBalance, setIsConnected);
-                    router.push("/dashboard");
-                  }}
-                >
-                  <img src="/images/keplr-logo.svg" className="w-[70px]" />
-                  <p className="text-center mt-5 text-2xl tracking-wider">
-                    Keplr
-                  </p>
-                </div>
+            <Popover.Content side="top">
+              <div className="bg-[#161833f7] w-[60vw] rounded-lg h-[450px] p-10">
+                <p className="text-4xl font-semibold text-center mb-10">
+                  Choose Wallet
+                </p>
+                <Separator />
+                <div className="flex justify-around my-10 ">
+                  <div
+                    className="gradient-border p-10  pointer flex flex-col items-center w-[200px]"
+                    onClick={() => {
+                      connectKeplrWallet(
+                        setAddress,
+                        setBalance,
+                        setIsConnected
+                      );
+                      router.push("/dashboard");
+                    }}
+                  >
+                    <img src="/images/keplr-logo.svg" className="w-[70px]" />
+                    <p className="text-center mt-5 text-2xl tracking-wider">
+                      Keplr
+                    </p>
+                  </div>
 
-                <div
-                  className="gradient-border p-10 pointer flex flex-col items-center w-[200px]"
-                  onClick={() => {
-                    connectMetaMaskWallet(
-                      setAddress,
-                      setBalance,
-                      setIsConnected
-                    );
-                    router.push("/dashboard");
-                  }}
-                >
-                  <img src="/images/metamask-fox.svg" className="w-[70px] " />
-                  <p className="text-center mt-5 text-2xl tracking-wider">
-                    Metamask
-                  </p>
+                  <div
+                    className="gradient-border p-10 pointer flex flex-col items-center w-[200px]"
+                    onClick={() => {
+                      connectMetaMaskWallet(
+                        setAddress,
+                        setBalance,
+                        setIsConnected
+                      );
+                      router.push("/dashboard");
+                    }}
+                  >
+                    <img src="/images/metamask-fox.svg" className="w-[70px] " />
+                    <p className="text-center mt-5 text-2xl tracking-wider">
+                      Metamask
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Popover.Content>
+            </Popover.Content>
           </Popover.Portal>
         </Popover.Root>
       )}

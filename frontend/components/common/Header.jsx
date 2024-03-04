@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { ConnectWalletNav } from "./ConnectWallet";
 import { navLinks } from "@/data";
+import { ConnectKitButton } from "connectkit";
 
 const Header = () => {
   return (
@@ -15,7 +16,7 @@ const Header = () => {
           <Link
             key={index}
             href={item.link}
-            className="ml-3 font-semibold hover:text-[#9f80ff]"
+            className="mr-8 font-semibold hover:text-[#9f80ff]"
           >
             {item.title}
           </Link>
@@ -23,7 +24,9 @@ const Header = () => {
       </nav>
 
       <div>
-        <ConnectWalletNav />
+        {/* <ConnectWalletNav /> */}
+        <ConnectKitButton theme="retro" />
+
       </div>
     </header>
   );
