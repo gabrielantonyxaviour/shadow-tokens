@@ -1,5 +1,5 @@
-// "use client";
-import React from "react";
+"use client";
+import React, {  useContext } from "react";
 import {
   Card,
   CardContent,
@@ -10,18 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { dummyNFTs } from "@/data";
-import { connectContract } from "@/lib/contract";
+import { UserContext } from "@/app/userContext";
 
-const Collection = ({ isDashboard = true, ethereum }) => {
-  // const [windowEth, setWindowEth] = useState(null);
-  // useEffect(() => {
-  //   const { ethereum } = window;
-  //   setWindowEth(ethereum)
-  // }, [windowEth]);
-
-
-  connectContract(ethereum)
+const Collection = ({ isDashboard = true }) => {
+  const { NFTs } = useContext(UserContext);
 
   return (
     <>
@@ -29,18 +21,22 @@ const Collection = ({ isDashboard = true, ethereum }) => {
       <div
         className={`grid ${isDashboard ? "grid-cols-3" : "grid-cols-4"} gap-4`}
       >
-        {dummyNFTs.map((item, index) => (
-          <div key={index}>
-            <CardComp
-              id={item.ID}
-              img={item.img}
-              title={item.title}
-              bid={item.bid}
-              chain={item.chain}
-              isDashboard={isDashboard}
-            />
-          </div>
-        ))}
+        {NFTs === null ? (
+          <p>loading...</p>
+        ) : (
+          NFTs.map((item, index) => (
+            <div key={index}>
+              <CardComp
+                id={item.tokenId}
+                owner={item.owner}
+                img={item.image}
+                title={item.name}
+                bid={item.price}
+                isDashboard={isDashboard}
+              />
+            </div>
+          ))
+        )}
       </div>
     </>
   );
@@ -48,7 +44,7 @@ const Collection = ({ isDashboard = true, ethereum }) => {
 
 export default Collection;
 
-const CardComp = ({ img, title, bid, chain, id, isDashboard }) => {
+const CardComp = ({ img, title, bid, id, isDashboard }) => {
   return (
     <Link href={`/${isDashboard ? "dashboard" : "explore"}/${id}`}>
       <Card className="bg-dark pointer border-0 text-muted-foreground backdrop-blur-sm">

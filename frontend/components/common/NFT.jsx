@@ -1,41 +1,57 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useParams, useRouter } from "next/navigation";
-import { dummyNFTs } from "@/data";
+import { UserContext } from "@/app/userContext";
 
 const NFT = () => {
+  const { NFTs } = useContext(UserContext);
+  const [data, setData] = useState(null);
   const { nft } = useParams();
   const router = useRouter();
-  const data = dummyNFTs.find((item) => item.ID === nft);
+
+  function fet() {
+    setData(NFTs.find((item) => item.tokenId.toString() == nft));
+  }
+
+  useEffect(() => {
+    fet();
+  }, []);
 
   return (
     <>
-      <div
-        onClick={() => router.back()}
-        className="purple-text font-semibold text-2xl pointer"
-      >
-        <span className="flex items-center">
+      {data === null ? (
+        <p>Loading...</p>
+      ) : (
+        <>
           {" "}
-          <IoMdArrowRoundBack />
-          Go Back
-        </span>
-      </div>
-      <div className="bg-dark rounded-lg mt-5 grid grid-cols-2">
-        <div>
-          <img
-            src={data.img}
-            className="object-cover w-full h-[400px] rounded-tl-lg"
-          />
-          <div className="p-5">
-            <p className="text-2xl font-semibold">{data.title} </p>
-            <p>Lorem ipsum dolor sit amet.</p>
+          <div
+            onClick={() => router.back()}
+            className="purple-text font-semibold text-2xl pointer"
+          >
+            <span className="flex items-center">
+              {" "}
+              <IoMdArrowRoundBack />
+              Go Back
+            </span>
           </div>
-        </div>
-        <div className="p-4">
-          <p>Creator</p>
-          <p>Owner</p>
-        </div>
-      </div>
+          <div className="bg-dark rounded-lg mt-5 grid grid-cols-2">
+            <div>
+              <img
+                src={data.image}
+                className="object-cover w-full h-[400px] rounded-tl-lg"
+              />
+              <div className="p-5">
+                <p className="text-2xl font-semibold">{data.name} </p>
+                <p>{data.description} </p>
+              </div>
+            </div>
+            <div className="p-4">
+              <p className="text-xl ">Owner: </p>
+              <p>{data.seller}</p>
+            </div>
+          </div>{" "}
+        </>
+      )}
     </>
   );
 };
