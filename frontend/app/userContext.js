@@ -10,7 +10,7 @@ export function User({ children }) {
   const [NFTs, setNFTs] = useState(null);
   async function getNft() {
     await axios
-      .get("http://nft-server-7h9e.vercel.app/api/nfts")
+      .get("https://nft-server-7h9e.vercel.app/api/nfts")
       .then((res) => {
         setNFTs(res.data.items);
       });

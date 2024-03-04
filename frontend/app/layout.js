@@ -29,11 +29,6 @@ export default function RootLayout({ children }) {
         <link data-rh="true" rel="icon" href="favicon.svg"></link>
       </head>
       <body
-      // className={
-      //   cn(
-      //   "min-h-screen bg-background font-sans antialiased",
-      //   fontSans.variable
-      // )}
       >
         {ready ? (
           <WagmiProvider config={config}>

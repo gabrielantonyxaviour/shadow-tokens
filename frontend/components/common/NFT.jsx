@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useParams, useRouter } from "next/navigation";
 import { UserContext } from "@/app/userContext";
+import { Button } from "../ui/button";
 
 const NFT = () => {
   const { NFTs } = useContext(UserContext);
@@ -41,13 +42,15 @@ const NFT = () => {
                 className="object-cover w-full h-[400px] rounded-tl-lg"
               />
               <div className="p-5">
-                <p className="text-2xl font-semibold">{data.name} </p>
+                <p className="text-2xl font-semibold leading-purple">{data.name} </p>
                 <p>{data.description} </p>
               </div>
             </div>
             <div className="p-4">
               <p className="text-xl ">Owner: </p>
               <p>{data.seller}</p>
+              <Button className='gradient-secondary'>Add to Vault</Button>
+            <Button>Fraction NFT</Button>
             </div>
           </div>{" "}
         </>

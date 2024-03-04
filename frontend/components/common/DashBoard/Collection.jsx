@@ -1,5 +1,5 @@
 "use client";
-import React, {  useContext } from "react";
+import React, { useContext } from "react";
 import {
   Card,
   CardContent,
@@ -55,11 +55,11 @@ const CardComp = ({ img, title, bid, id, isDashboard }) => {
           />
         </CardHeader>
         <CardContent>
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className="leading-purple">{title}</CardTitle>
         </CardContent>
         <Separator className="bg-[#888]" />
-        <CardFooter className="mt-4">
-          <p>{bid}</p>
+        <CardFooter className="mt-4 flex text-sm">
+          <p className="text-xs">{bid} MATIC</p>
           <Button className="gradient ml-5 px-6 font-semibold">
             Add to Vault
           </Button>
