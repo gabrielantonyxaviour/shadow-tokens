@@ -3,10 +3,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { sidebarLinks } from "@/data";
+import { useAccount } from "wagmi";
+import { truncateWalletAddress } from "@/lib/utils";
 
-const SideBar = ({ address }) => {
+const SideBar = () => {
   const currentPath = usePathname();
   const [path, setPath] = useState(currentPath);
+  const { address } = useAccount();
 
   useEffect(() => {
     setPath(currentPath);
@@ -20,12 +23,10 @@ const SideBar = ({ address }) => {
       </Avatar>
 
       <div className="text-white text-center mb-6">
-        <p className=" font-bold text-xl mt-4 my-2">Francisco Maia</p>
-        <p className="font-semibold text-sm">{address} </p>
-
-        <p className="text-[#e5e5e5] text-sm my-4">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non
-          repellendus facere beatae
+        <p className=" font-bold text-xl mt-4 my-2">Shadow User</p>
+        <p className="font-semibold text-sm">
+          {" "}
+          {truncateWalletAddress(address)}{" "}
         </p>
       </div>
 

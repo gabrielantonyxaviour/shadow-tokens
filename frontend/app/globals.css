@@ -110,6 +110,7 @@ body {
     #725bda 0,
     rgba(6, 19, 45, 0) 100%
   );
+
   content: "";
   height: 2000px;
   left: -60%;
@@ -178,4 +179,14 @@ body {
   );
   border-radius: 10px;
   background-color: #161833eb;
+}
+
+input,
+textarea {
+  background: transparent;
+  border: 1px solid #d2b7f8;
+  padding: 1rem;
+  border-radius: 10px;
+  outline: none;
+  margin-top: 5px;
 }

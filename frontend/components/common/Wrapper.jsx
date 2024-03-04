@@ -6,7 +6,9 @@ const Wrapper = ({ children }) => {
       {children}
 
       <div className="shape"></div>
+      <div className="shape"></div>
       <div className="shape right"></div>
+      <div className="shape s3 right"></div>
       <div className="shape s3 right"></div>
     </div>
   );

@@ -44,10 +44,10 @@ const Collection = ({ isDashboard = true }) => {
 
 export default Collection;
 
-const CardComp = ({ img, title, bid, id, isDashboard }) => {
+export const CardComp = ({ img, title, bid, id, isDashboard }) => {
   return (
-    <Link href={`/${isDashboard ? "dashboard" : "explore"}/${id}`}>
-      <Card className="bg-dark pointer border-0 text-muted-foreground backdrop-blur-sm">
+    <Card className="bg-dark pointer border-0 text-muted-foreground backdrop-blur-sm">
+      <Link href={`/${isDashboard ? "dashboard" : "explore"}/${id}`}>
         <CardHeader className="overflow-hidden h-[272px]">
           <img
             src={img}
@@ -58,13 +58,13 @@ const CardComp = ({ img, title, bid, id, isDashboard }) => {
           <CardTitle className="leading-purple">{title}</CardTitle>
         </CardContent>
         <Separator className="bg-[#888]" />
-        <CardFooter className="mt-4 flex text-sm">
-          <p className="text-xs">{bid} MATIC</p>
-          <Button className="gradient ml-5 px-6 font-semibold">
-            Add to Vault
-          </Button>
-        </CardFooter>
-      </Card>
-    </Link>
+      </Link>
+      <CardFooter className="mt-4 flex text-sm justify-between">
+        <p className="text-xs">{bid} MATIC</p>
+        <Button className="gradient ml-5 px-6 font-semibold">
+          Add to Vault
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };

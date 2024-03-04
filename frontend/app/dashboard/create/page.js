@@ -1,9 +1,12 @@
-import React from 'react'
+import CreateNFT from "@/components/common/DashBoard/CreateNFT";
+import React from "react";
 
 const ImportNFT = () => {
   return (
-    <div>ImportNFT</div>
-  )
-}
+    <>
+      <CreateNFT />{" "}
+    </>
+  );
+};
 
-export default ImportNFT
+export default ImportNFT;
