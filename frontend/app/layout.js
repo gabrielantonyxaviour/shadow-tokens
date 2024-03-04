@@ -38,7 +38,17 @@ export default function RootLayout({ children }) {
         {ready ? (
           <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
-              <ConnectKitProvider>
+              <ConnectKitProvider
+                customTheme={{
+                  "--ck-overlay-background":
+                    "linear-gradient(264.28deg, #dec7ff88 -38.2%, #5d27fe78 103.12%)",
+                  "--ck-connectbutton-background":
+                    "linear-gradient(264.28deg, #dec7ff -38.2%, #5c27fe 103.12%)",
+                  "--ck-connectbutton-border-radius": "0.5rem",
+                  "--ck-connectbutton-hover-background":
+                    "linear-gradient(264.28deg, #dec7ff88 -38.2%, #5d27fe78 103.12%)",
+                }}
+              >
                 <Wrapper>
                   <User>
                     <Header />

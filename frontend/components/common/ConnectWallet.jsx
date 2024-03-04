@@ -15,6 +15,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
+
 export const ConnectWalletModal = () => {
   const { setAddress, setBalance, setIsConnected, isConnected } =
     useContext(UserContext);
