@@ -1,5 +1,6 @@
 import { BsCollectionFill } from "react-icons/bs";
 import { LuImport } from "react-icons/lu";
+import { GoRepoLocked } from "react-icons/go";
 
 export const sidebarLinks = [
   {
@@ -8,9 +9,14 @@ export const sidebarLinks = [
     icon: <BsCollectionFill />,
   },
   {
-    name: "Create NFT",
-    route: "/dashboard/create",
+    name: "Mint NFT",
+    route: "/dashboard/mint",
     icon: <LuImport />,
+  },
+  {
+    name: "Fractionalized NFTs",
+    route: "/dashboard/fractionalized-nfts",
+    icon: <GoRepoLocked />,
   },
 ];
 

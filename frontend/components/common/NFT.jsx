@@ -5,7 +5,6 @@ import { UserContext } from "@/app/userContext";
 import { Button } from "../ui/button";
 import { Separator } from "@/components/ui/separator";
 import CustomTable from "./Table";
-import { truncateWalletAddress } from "@/lib/utils";
 
 const NFT = () => {
   const { NFTs } = useContext(UserContext);
@@ -52,40 +51,21 @@ const NFT = () => {
               </div>
               <Separator className="bg-[#888]" />
               <div className="p-5 flex justify-between items-center">
-                <p>Price: {data.price} MATIC</p>
+                <div className="flex justify-between items-center">
+                  <div className="bg-white rounded-full flex items-center w-[25px] h-[25px] p-1">
+                    <img src="/images/polygon-matic-logo.svg" width={20} />
+                  </div>
+                  <div className="text-xs ml-2 text-white">
+                    <p>MATIC</p>
+                    <p className="font-bold">{data.price}</p>
+                  </div>
+                </div>
                 <Button className="gradient ml-5 px-6 font-semibold">
                   Add to Vault
                 </Button>
               </div>
             </div>
             <div>
-              <div className="p-4 bg-dark rounded-lg mb-5">
-                <p className="text-2xl font-semibold leading-purple">
-                  Creator:{" "}
-                  <span className="text-lg text-white">
-                    {truncateWalletAddress(data.seller)}
-                  </span>
-                </p>
-
-                <div className="my-5">
-                  <form>
-                    <p className="text-2xl font-semibold leading-purple mb-5">
-                      Fraction NFT
-                    </p>
-                    <div className="flex flex-col mb-5">
-                      {" "}
-                      <label>Fraction to Send:</label>
-                      <input />
-                    </div>
-                    <div className="flex flex-col mb-5">
-                      {" "}
-                      <label>Secret Address:</label>
-                      <input />
-                    </div>
-                    <Button className="gradient w-full">Send Fraction</Button>
-                  </form>
-                </div>
-              </div>
               <div className="p-4 bg-dark rounded-lg">
                 <p className="text-2xl font-semibold leading-purple my-5">
                   Fractional Owners:

@@ -31,7 +31,7 @@ const SideBar = () => {
       </div>
 
       {sidebarLinks.map((item, index) => (
-        <Link key={index} href={item.route} className=" mb-4">
+        <Link key={index} href={item.route} className="mb-4">
           <div className={`sidebar-tab ${path === item.route && "active"}`}>
             {item.icon} <p className="ml-3">{item.name} </p>
           </div>

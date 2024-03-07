@@ -144,9 +144,11 @@ body {
 .sidebar-tab {
   border: 1px solid #d2b7f8;
   color: #d2b7f8;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 0;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 230px;
 }
 
 .sidebar-tab.active {

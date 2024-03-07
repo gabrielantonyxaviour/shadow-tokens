@@ -1,10 +1,10 @@
-import CreateNFT from "@/components/common/DashBoard/CreateNFT";
+import MintNFT from "@/components/common/DashBoard/MintNFT";
 import React from "react";
 
 const ImportNFT = () => {
   return (
     <>
-      <CreateNFT />{" "}
+      <MintNFT />{" "}
     </>
   );
 };
