@@ -1,8 +1,15 @@
 "use client";
 import React from "react";
 import SideBar from "@/components/common/DashBoard/SideBar";
+import { useAccount } from "wagmi";
+import { redirect } from "next/navigation";
 
 export default function DashBoardLayout({ children }) {
+  const { isDisconnected } = useAccount();
+
+  if (isDisconnected) {
+    redirect("/");
+  }
 
   return (
     <div className="pt-[5rem]">
