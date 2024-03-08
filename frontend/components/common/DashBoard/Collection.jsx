@@ -12,27 +12,27 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { UserContext } from "@/app/userContext";
 import { useRouter } from "next/navigation";
+import Loader from "../Loader";
 
 const Collection = ({ isDashboard = true }) => {
   const { NFTs } = useContext(UserContext);
   return (
     <>
-      {isDashboard && (
-        <p className="font-semibold text-4xl mb-5">Private Collection</p>
-      )}
-      <div
-        className={`grid ${isDashboard ? "grid-cols-3" : "grid-cols-4"} gap-4`}
-      >
-        {NFTs === null ? (
-          <p>loading...</p>
-        ) : (
-          NFTs.map((nft, index) => (
+      {NFTs === null ? (
+        <Loader count={isDashboard ? 3 : 4} />
+      ) : (
+        <div
+          className={`grid ${
+            isDashboard ? "grid-cols-3" : "grid-cols-4"
+          } gap-4`}
+        >
+          {NFTs.map((nft, index) => (
             <div key={index}>
               <CardComp nft={nft} isDashboard={isDashboard} />
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </>
   );
 };

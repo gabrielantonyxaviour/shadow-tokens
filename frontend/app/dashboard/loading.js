@@ -1,9 +1,5 @@
-import { ScaleLoader } from "react-spinners";
+import Loader from "@/components/common/Loader";
 
 export default function Loading() {
-  return (
-    <div className=" h-full flex justify-center items-center">
-      <ScaleLoader color="#dec7ff" />
-    </div>
-  );
+  return <Loader count={3} />;
 }
