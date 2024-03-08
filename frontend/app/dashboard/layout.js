@@ -12,7 +12,7 @@ export default function DashBoardLayout({ children }) {
   }
 
   return (
-    <div className="pt-[5rem]">
+    <div className="pt-[5rem] mb-20">
       <div className="gradient h-[6rem] mb-10"></div>
       <div defaultValue="account" className="grid grid-cols-4 mx-10">
         <SideBar />

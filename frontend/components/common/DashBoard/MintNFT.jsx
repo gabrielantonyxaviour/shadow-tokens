@@ -1,7 +1,14 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 
 const MintNFT = () => {
+  const [formParams, updateFormParams] = useState({
+    name: "",
+    description: "",
+    price: "",
+  });
+  
   return (
     <>
       <p className="font-semibold text-4xl mb-5">Mint NFT</p>
@@ -25,7 +32,7 @@ const MintNFT = () => {
               <label>Upload Image</label>
               <input type={"file"} />
             </div>
-            <Button className="gradient">Mint NFT</Button>
+            <Button className="gradient w-full">Mint NFT</Button>
           </form>
         </div>
 

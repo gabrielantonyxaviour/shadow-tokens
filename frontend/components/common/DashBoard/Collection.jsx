@@ -16,8 +16,10 @@ import { useRouter } from "next/navigation";
 const Collection = ({ isDashboard = true }) => {
   const { NFTs } = useContext(UserContext);
   return (
-    <>
-      {isDashboard && <p className="font-semibold text-4xl mb-5">Collection</p>}
+    <> 
+      {isDashboard && (
+        <p className="font-semibold text-4xl mb-5">Private Collection</p>
+      )}
       <div
         className={`grid ${isDashboard ? "grid-cols-3" : "grid-cols-4"} gap-4`}
       >

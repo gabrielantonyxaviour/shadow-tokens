@@ -16,7 +16,7 @@ const SideBar = () => {
   }, [path, currentPath]);
 
   return (
-    <div className="flex flex-col items-center bg-[#8173c131] p-10 h-[500px]">
+    <div className="flex flex-col items-center bg-[#8173c131] p-10 h-fit">
       <Avatar className="w-[150px] h-[150px]">
         <AvatarImage src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>

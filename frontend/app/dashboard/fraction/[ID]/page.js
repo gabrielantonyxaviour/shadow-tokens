@@ -35,11 +35,6 @@ const FractionNFT = () => {
               <label>Price per fraction:</label>
               <input />
             </div>
-            <div className="flex flex-col mb-5">
-              {" "}
-              <label>Secret Address:</label>
-              <input />
-            </div>
             <Button className="gradient w-full">Send Fraction</Button>
           </form>
         </div>

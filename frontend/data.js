@@ -1,22 +1,28 @@
 import { BsCollectionFill } from "react-icons/bs";
-import { LuImport } from "react-icons/lu";
-import { GoRepoLocked } from "react-icons/go";
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
+import { MdCreateNewFolder } from "react-icons/md";
+import { BiSolidPurchaseTag } from "react-icons/bi";
 
 export const sidebarLinks = [
   {
-    name: "Collection",
+    name: "My Collection",
     route: "/dashboard",
-    icon: <BsCollectionFill />,
+    icon: <RiGitRepositoryPrivateFill />,
   },
   {
     name: "Mint NFT",
     route: "/dashboard/mint",
-    icon: <LuImport />,
+    icon: <MdCreateNewFolder />,
   },
   {
     name: "Fractionalized NFTs",
     route: "/dashboard/fractionalized-nfts",
-    icon: <GoRepoLocked />,
+    icon: <BsCollectionFill />,
+  },
+  {
+    name: "Purchased Fractions",
+    route: "/dashboard/fractionalized-nfts",
+    icon: <BiSolidPurchaseTag />,
   },
 ];
 
