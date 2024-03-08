@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 const Collection = ({ isDashboard = true }) => {
   const { NFTs } = useContext(UserContext);
   return (
-    <> 
+    <>
       {isDashboard && (
         <p className="font-semibold text-4xl mb-5">Private Collection</p>
       )}
