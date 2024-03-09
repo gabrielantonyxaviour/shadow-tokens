@@ -1,3 +1,4 @@
 .env.enc
 .env
 node_modules
+build
