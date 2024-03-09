@@ -13,12 +13,16 @@ pragma solidity ^0.8.0;
 // 3. retreiveNFTFraction
 
 import "./interface/IShadows.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/Create2.sol";
+
+error NftNotApproved(address nftContract, uint256 tokenId);
+error NftAlreadyFractionalized(address nftContract, uint256 tokenId);
+
 
 contract ShadowProtocol{
 
-    mapping(address=>mapping(uint256=>address)) public nftToVauilts;
-
+    mapping(address=>mapping(uint256=>bool)) public nftFractionalized;
     IShadows public shadows;
 
     constructor(address _shadowsImplementation) 
@@ -26,10 +30,21 @@ contract ShadowProtocol{
         shadows = IShadows(_deployProxy(_shadowsImplementation, 0));
     }
 
+    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions, string memory _fractionUri) public {
+        
+        if(IERC721(_nftContract).getApproved(_tokenId)!=address(this)){
+            revert NftNotApproved(_nftContract, _tokenId);
+        }
+        
+        if(nftFractionalized[_nftContract][_tokenId]){
+            revert NftAlreadyFractionalized(_nftContract, _tokenId);
+        }
 
-
-    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId) public {
-        // locks the NFT here
+        IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
+        nftFractionalized[_nftContract][_tokenId] = true;
+        shadows.initNft(_nftContract, _tokenId, _fractions, _fractionUri);
+        
+        // Mint fractions in Secret
     }
 
     function mintFractionsInEvm(address _nftContract, uint256 _tokenId) public {
@@ -41,7 +56,7 @@ contract ShadowProtocol{
         // send the shares to the secret network
     }
 
- function _deployProxy(
+    function _deployProxy(
         address implementation,
         uint salt
     ) internal returns (address _contractAddress) {
