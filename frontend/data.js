@@ -1,61 +1,28 @@
 import { BsCollectionFill } from "react-icons/bs";
-import { LuImport } from "react-icons/lu";
-
-export const dummyNFTs = [
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "01",
-  },
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "02",
-  },
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "03",
-  },
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "04",
-  },
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "05",
-  },
-  {
-    img: "https://images.pexels.com/photos/1576939/pexels-photo-1576939.jpeg",
-    title: "3D Digital Artwork",
-    chain: "Polygon",
-    bid: "0.45 ETH",
-    ID: "06",
-  },
-];
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
+import { MdCreateNewFolder } from "react-icons/md";
+import { BiSolidPurchaseTag } from "react-icons/bi";
 
 export const sidebarLinks = [
   {
-    name: "Collection",
+    name: "My Collection",
     route: "/dashboard",
+    icon: <RiGitRepositoryPrivateFill />,
+  },
+  {
+    name: "Mint NFT",
+    route: "/dashboard/mint",
+    icon: <MdCreateNewFolder />,
+  },
+  {
+    name: "Fractionalized NFTs",
+    route: "/dashboard/fractionalized-nfts",
     icon: <BsCollectionFill />,
   },
   {
-    name: "Create NFT",
-    route: "/dashboard/create",
-    icon: <LuImport />,
+    name: "Purchased Fractions",
+    route: "/dashboard/fractionalized-nfts",
+    icon: <BiSolidPurchaseTag />,
   },
 ];
 

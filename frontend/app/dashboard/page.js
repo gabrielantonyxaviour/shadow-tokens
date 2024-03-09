@@ -1,10 +1,11 @@
-"use client";
 import Collection from "@/components/common/DashBoard/Collection";
 import React from "react";
+import Loading from "./loading";
 
-const Page = () => {
+const Page = async () => {
   return (
     <>
+      <p className="font-semibold text-4xl mb-5">Private Collection</p>
       <Collection />
     </>
   );
