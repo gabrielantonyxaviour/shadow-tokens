@@ -63,6 +63,11 @@ contract Shadows is ERC1155, ERC1155URIStorage, IShadows {
         _burn(_burner, _genTokenId, _fractions);
     }
 
+    function getFractions(address _owner, address _tokenAddress, uint256 _tokenId) public view returns(uint256){
+        uint256 _genTokenId=uint256(keccak256(abi.encodePacked(_tokenAddress, _tokenId)));
+        return balanceOf(_owner, _genTokenId);
+    }
+
     function uri(uint256 tokenId) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
         return ERC1155URIStorage.uri(tokenId);
     }

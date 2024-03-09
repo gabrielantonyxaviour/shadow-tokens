@@ -18,7 +18,8 @@ import "@openzeppelin/contracts/utils/Create2.sol";
 
 error NftNotApproved(address nftContract, uint256 tokenId);
 error NftAlreadyFractionalized(address nftContract, uint256 tokenId);
-
+error NftNotFractionalized(address nftContract, uint256 tokenId);
+error InvalidFractions(address nftContract, address caller, uint256 tokenId,  uint256 fractions);
 
 contract ShadowProtocol{
 
@@ -30,15 +31,11 @@ contract ShadowProtocol{
         shadows = IShadows(_deployProxy(_shadowsImplementation, 0));
     }
 
-    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions, string memory _fractionUri) public {
+    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions, string memory _fractionUri) external {
         
-        if(IERC721(_nftContract).getApproved(_tokenId)!=address(this)){
-            revert NftNotApproved(_nftContract, _tokenId);
-        }
+        if(IERC721(_nftContract).getApproved(_tokenId)!=address(this)) revert NftNotApproved(_nftContract, _tokenId);
         
-        if(nftFractionalized[_nftContract][_tokenId]){
-            revert NftAlreadyFractionalized(_nftContract, _tokenId);
-        }
+        if(nftFractionalized[_nftContract][_tokenId]) revert NftAlreadyFractionalized(_nftContract, _tokenId);
 
         IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
         nftFractionalized[_nftContract][_tokenId] = true;
@@ -47,13 +44,17 @@ contract ShadowProtocol{
         // Mint fractions in Secret
     }
 
-    function mintFractionsInEvm(address _nftContract, uint256 _tokenId) public {
-        // mint the shares in the EVM network
+    function _mintFractionsInEvm(address _nftContract, uint256 _tokenId, address receiver, uint256 _fractions) internal {
+        if(!nftFractionalized[_nftContract][_tokenId]) revert NftNotFractionalized(_nftContract, _tokenId);
+        shadows.mintFractions(_receiver, _tokenAddress, _tokenId, _fractions);
     }
     
 
-    function sendSharesToSecret(address _nftContract, uint256 _tokenId, uint256 _shares) public {
-        // send the shares to the secret network
+    function sendSharesToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions) external {
+        if(shadows.getFractions(msg.sender, _nftContract, _tokenId) < _fractions) revert InvalidFractions(_nftContract, msg.sender, _tokenId, _fractions);      
+        shadows.burnFractions(msg.sender, _nftContract, _tokenId, _fractions);
+
+        // send the fractions to the secret network
     }
 
     function _deployProxy(
