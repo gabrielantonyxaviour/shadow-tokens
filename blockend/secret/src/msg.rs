@@ -8,22 +8,46 @@ pub struct InstantiateMsg {}
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    SendMessageEvm {
-        destination_chain: String,
-        destination_address: String,
-        message: String,
+    SendFractions {
+        source_chain: String,
+        source_address: String,
+        asset_id: usize,
+        fractions: u128,
+        hash_data: Vec<u8>,
+        signature: Vec<u8>,
+        pub_key: Vec<u8>,
     },
-    ReceiveMessageEvm {
+    FractionalizeNft {
         source_chain: String,
         source_address: String,
         payload: Binary,
     },
+    TransferFractionsToEvm{
+        destination_chain: String,
+        destination_address: String,
+        asset_id: Vec<u8>,
+        total_fractions: u128,
+        signature: Vec<u8>,
+        pub_key: Vec<u8>,
+    },
+    ListFractions{
+        asset_id: Vec<u8>,
+        fractions: u128,
+        total_price: u128,
+        active_time: u64,
+        signature: Vec<u8>,
+        pub_key: Vec<u8>,
+    }
+
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     GetStoredMessage {},
+    GetListing {asset_id: String},
+    GetAvaialbleFractions {asset_id: String},
+    GetAsset {asset_id: String},
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]
