@@ -2,6 +2,7 @@ use secret_toolkit::storage::Item;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use secp256k1::{PublicKey, SecretKey};
+
 #[derive(Serialize, Deserialize)]
 pub struct MyMessage {
     pub sender: String,

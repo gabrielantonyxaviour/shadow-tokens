@@ -47,7 +47,7 @@ contract ShadowProtocol is AxelarExecutable{
         shadows.initNft(_nftContract, _tokenId, _fractions, _fractionUri);
         
         // Mint fractions in Secret
-        _send(abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
+        _send("fractionalize_nft", abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
     }
 
     function _mintFractionsInEvm(address _nftContract, uint256 _tokenId, address _receiver, uint256 _fractions) internal {
@@ -61,7 +61,7 @@ contract ShadowProtocol is AxelarExecutable{
         shadows.burnFractions(msg.sender, _nftContract, _tokenId, _fractions);
 
         // send the fractions to the secret network
-        _send(abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
+        _send("send_fractions",abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
     }
 
     function _deployProxy(
@@ -91,9 +91,9 @@ contract ShadowProtocol is AxelarExecutable{
             );
     }
 
-    function _send(bytes memory executeMsgPayload) internal {
+    function _send(string memory functionName, bytes memory executeMsgPayload) internal {
         // 1. Generate GMP payload
-        bytes memory payload = _encodePayloadToCosmWasm(executeMsgPayload);
+        bytes memory payload = _encodePayloadToCosmWasm(functionName,executeMsgPayload);
 
         // 2. Pay for gas
         gasService.payNativeGasForContractCall{value: msg.value}(
@@ -108,7 +108,7 @@ contract ShadowProtocol is AxelarExecutable{
         gateway.callContract(destinationChain, destinationAddress, payload);
     }
 
-    function _encodePayloadToCosmWasm(bytes memory executeMsgPayload) internal view returns (bytes memory) {
+    function _encodePayloadToCosmWasm(string memory functionName, bytes memory executeMsgPayload) internal view returns (bytes memory) {
         // Schema
         //   bytes4  version number (0x00000001)
         //   bytes   ABI-encoded payload, indicating function name and arguments:           
@@ -136,7 +136,7 @@ contract ShadowProtocol is AxelarExecutable{
 
         bytes memory gmpPayload;
         gmpPayload = abi.encode(
-            "receive_message_evm",
+            functionName,
             argumentNameArray,
             abiTypeArray,
             argValues

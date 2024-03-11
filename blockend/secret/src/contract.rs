@@ -127,7 +127,6 @@ pub fn receive_message_evm(
     )
     .unwrap();
 
-
     Ok(Response::new())
 }
 
