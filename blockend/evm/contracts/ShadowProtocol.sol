@@ -36,7 +36,7 @@ contract ShadowProtocol is AxelarExecutable{
         destinationAddress = _destinationAddress;
     }
 
-    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions, string memory _fractionUri) external payable {
+    function fractionalizeNftToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions, uint256 _pricePerFractionInUscrt, string memory _fractionUri) external payable {
         
         if(IERC721(_nftContract).getApproved(_tokenId)!=address(this)) revert NftNotApproved(_nftContract, _tokenId);
         
@@ -47,7 +47,7 @@ contract ShadowProtocol is AxelarExecutable{
         shadows.initNft(_nftContract, _tokenId, _fractions, _fractionUri);
         
         // Mint fractions in Secret
-        _send("fractionalize_nft", abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
+        _send("fractionalize_nft", abi.encode(_nftContract, _tokenId, _pricePerFractionInUscrt, _fractions, msg.sender));
     }
 
     function _mintFractionsInEvm(address _nftContract, uint256 _tokenId, address _receiver, uint256 _fractions) internal {

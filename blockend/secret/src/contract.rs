@@ -15,7 +15,7 @@ use crate::msg::QueryMsg::GetStoredMessage;
 
 use crate::state::*;
 
-use ethabi::{decode, encode, ParamType, Token};
+use ethabi::{decode, encode, token, ParamType, Token};
 use hex;
 use prost::Message;
 use serde_json_wasm::to_string;
@@ -149,6 +149,19 @@ pub fn receive_message_evm(
 
 
 pub fn try_fractionalize_nft(deps: Deps, _env: Env, msg: QueryMsg) {
+    let decoded: Vec<Token>=decode(&vec![ParamType::Address, ParamType::Uint(256), ParamType::Uint(256), ParamType::Uint(256), ParamType::Address], payload.as_slice()).unwrap();
+
+    let token_address: [u8; 20] = decoded[0].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
+    let token_id: [u64; 4] = decoded[1].clone().into_uint().unwrap();
+    let total_fractions: [u64; 4] = decoded[2].clone().into_uint().unwrap();
+    let price_per_fraction: [u64; 4] = decoded[3].clone().into_uint().unwrap();
+    let owner_address: [u8; 20] = decoded[3].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
+
+    let mut assets: Item<Assets> = ASSETS
+      .load(deps.storage)
+      .unwrap_or(Assets {
+          assets: Vec::new(),
+      });
 
 }
 

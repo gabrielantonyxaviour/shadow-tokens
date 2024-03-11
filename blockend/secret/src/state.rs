@@ -11,10 +11,10 @@ pub struct MyMessage {
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 pub struct Asset {
     pub token_address: [u8; 32],
-    pub token_id: [u8; 32],
-    pub total_fractions: u128,
-    pub price_per_fraction: u128,
-    pub available_fractions: u128,
+    pub token_id: [u64; 4],
+    pub total_fractions: [u64; 4],
+    pub price_per_fraction: [u64; 4],
+    pub available_fractions: [u64; 4],
     pub owner_address: [u8; 32],
 }
 
@@ -25,8 +25,8 @@ pub struct Assets {
 #[derive(Serialize, Deserialize, Clone, Debug, Eq, PartialEq, JsonSchema)]
 pub struct Listing {
     pub asset_id: usize,
-    pub fractions: u128,
-    pub total_price: u128,
+    pub fractions: [u64; 4],
+    pub total_price: [u64; 4],
     pub active_time: u64,
     pub lister_address: [u8; 32],
 }
