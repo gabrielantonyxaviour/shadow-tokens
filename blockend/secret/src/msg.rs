@@ -43,9 +43,9 @@ pub enum ExecuteMsg {
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
     GetStoredMessage {},
-    GetListing {asset_id: String},
-    GetAvaialbleFractions {asset_id: String},
-    GetAsset {asset_id: String},
+    GetListing {listing_id: usize},
+    GetAvaialbleFractions {asset_id: usize},
+    GetAsset {asset_id: usize},
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq)]

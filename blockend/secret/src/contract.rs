@@ -11,7 +11,7 @@ use crate::{
     msg::{ExecuteMsg, Fee, GetStoredMessageResp, InstantiateMsg, QueryMsg},
 };
 
-use crate::msg::QueryMsg::GetStoredMessage;
+use crate::msg::QueryMsg::{GetStoredMessage, GetListing, GetAvaialbleFractions, GetAsset};
 
 use crate::state::{ASSETS, ASSET_COUNT, LISTINGS, LISTING_COUNT, STORED_MESSAGE};
 
@@ -197,7 +197,9 @@ pub fn try_list_fractions(deps: Deps, _env: Env, asset_id: usize, fractions: [u6
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         GetStoredMessage {} => to_binary(&get_stored_message(deps)?),
-
+        GetListing { listing_id } => to_binary(&get_listing(deps, listing_id)?),
+        GetAvaialbleFractions { asset_id } => to_binary(&get_available_fractions(deps, asset_id)?),
+        GetAsset { asset_id } => to_binary(&get_asset(deps, asset_id)?),
     }
 }
 
@@ -208,6 +210,23 @@ pub fn get_stored_message(deps: Deps) -> StdResult<GetStoredMessageResp> {
         message: message.message,
     };
     Ok(resp)
+}
+
+pub fn get_listing(deps: Deps, listing_id: usize) -> StdResult<Listing> {
+    let listings = LISTINGS.may_load(deps.storage).unwrap().unwrap();
+    let listing = listings.listings.get(listing_id).unwrap();
+    Ok(listing)
+}
+
+pub fn get_available_fractions(deps: Deps, asset_id: usize) -> StdResult<[u64; 4]> {
+    let assets = ASSETS.may_load(deps.storage).unwrap().unwrap();
+    let asset = assets.assets.get(asset_id).unwrap();
+    Ok(asset.available_fractions)
+}
+pub fn get_asset(deps: Deps, asset_id: usize) -> StdResult<Asset> {
+    let assets = ASSETS.may_load(deps.storage).unwrap().unwrap();
+    let asset = assets.assets.get(asset_id).unwrap();
+    Ok(asset)
 }
 
 
