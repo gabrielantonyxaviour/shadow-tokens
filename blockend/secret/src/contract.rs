@@ -13,12 +13,13 @@ use crate::{
 
 use crate::msg::QueryMsg::GetStoredMessage;
 
-use crate::state::*;
+use crate::state::{ASSETS, ASSET_COUNT, LISTINGS, LISTING_COUNT, STORED_MESSAGE};
 
 use ethabi::{decode, encode, token, ParamType, Token};
 use hex;
 use prost::Message;
 use serde_json_wasm::to_string;
+
 
 use crate::msg::GmpMessage;
 
@@ -40,7 +41,7 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> Result<Response, CustomContractError> {
     match msg {
-        ExecuteMsg::SendFractions {
+        ExecuteMsg::SendFractionsToEvm {
             destination_chain,
             destination_address,
             asset_id,
@@ -48,7 +49,7 @@ pub fn execute(
             hash_data,
             signature,
             pub_key,
-        } => try_send_fractions_to_evm(
+        } => try_send_fractions(
             deps,
             env,
             info,
@@ -60,102 +61,29 @@ pub fn execute(
             signature,
             pub_key,
         ),
+        ExecuteMsg::SendFractionsToSecret {
+            source_chain,
+            source_address,
+            payload,
+        } => try_receive_fractions_from_evm(deps, source_chain, source_address, payload),
         ExecuteMsg::FractionalizeNft {
             source_chain,
             source_address,
             payload,
         } => try_fractionalize_nft(deps, source_chain, source_address, payload),
-        ExecuteMsg::TransferFractionsToEvm {
-            source_chain, 
-            source_address,
-            payload,
-        } => try_send_fractions_to_evm(deps, source_chain, source_address, payload),
-        ExecuteMsg::ListFractions { asset_id, fractions, total_price, active_time, signature, pub_key }
+        ExecuteMsg::ListFractions { asset_id, fractions, total_price, active_time, hash_data, signature, pub_key } => try_list_fractions(deps, asset_id, fractions, total_price, active_time, hash_data, signature, pub_key),
     }
 }
 
 
-
-pub fn send_message_evm(
-    _deps: DepsMut,
-    env: Env,
-    info: MessageInfo,
-    destination_chain: String,
-    destination_address: String,
-    message: String,
-) -> Result<Response, CustomContractError> {
-    // Message payload to be received by the destination
-    let message_payload = encode(&vec![
-        Token::String(info.sender.to_string()),
-        Token::Uint(10),
-    ]);
-
-    let coin = &info.funds[0];
-
-    let my_coin = crate::ibc::Coin {
-        denom: coin.denom.clone(),
-        amount: coin.amount.clone().to_string(),
-    };
-
-    let gmp_message: GmpMessage = GmpMessage {
-        destination_chain,
-        destination_address,
-        payload: message_payload.to_vec(),
-        type_: 1,
-        fee: Some(Fee {
-            amount: coin.amount.clone().to_string(), // Make sure to handle amounts accurately
-            recipient: "axelar1aythygn6z5thymj6tmzfwekzh05ewg3l7d6y89".to_string(),
-        }),
-    };
-
-    let memo = to_string(&gmp_message).unwrap();
-
-    let ibc_message = crate::ibc::MsgTransfer {
-        source_port: "transfer".to_string(),
-        source_channel: "channel-3".to_string(), // Testnet Osmosis to axelarnet: https://docs.axelar.dev/resources/testnet#ibc-channels
-        token: Some(my_coin.into()),
-        sender: env.contract.address.to_string(),
-        receiver: "axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5".to_string(),
-        timeout_height: None,
-        timeout_timestamp: env.block.time.plus_seconds(604_800u64).nanos(),
-        memo: memo,
-    };
-
-    let cosmos_msg = cosmwasm_std::CosmosMsg::Stargate {
-        type_url: "/ibc.applications.transfer.v1.MsgTransfer".to_string(),
-        value: Binary(ibc_message.encode_to_vec()),
-    };
-
-    Ok(Response::new().add_message(cosmos_msg))
-}
-
-pub fn receive_message_evm(
-    deps: DepsMut,
-    _source_chain: String,
-    _source_address: String,
-    payload: Binary,
-) -> Result<Response, CustomContractError> {
-    
-    // decode the payload
-    // executeMsgPayload: [sender, message]
-    let decoded = decode(
-        &vec![ParamType::Address, ParamType::Uint(256), ParamType::Uint(256), ParamType::Address],
-        payload.as_slice(),
-    )
-    .unwrap();
-
-    Ok(Response::new())
-}
-
-
-pub fn try_fractionalize_nft(deps: Deps, _env: Env, msg: QueryMsg) {
+pub fn try_fractionalize_nft(deps: DepsMut, _source_chain: String, _source_address: String, payload: Binary) {
     let decoded: Vec<Token>=decode(&vec![ParamType::Address, ParamType::Uint(256), ParamType::Uint(256), ParamType::Uint(256), ParamType::Address], payload.as_slice()).unwrap();
 
     let token_address: [u8; 20] = decoded[0].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
     let token_id: [u64; 4] = decoded[1].clone().into_uint().unwrap();
     let total_fractions: [u64; 4] = decoded[2].clone().into_uint().unwrap();
     let price_per_fraction: [u64; 4] = decoded[3].clone().into_uint().unwrap();
-    let owner_address: [u8; 20] = decoded[3].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
+    let owner_address: [u8; 20] = decoded[4].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
 
     let mut assets: Item<Assets> = ASSETS
       .load(deps.storage)
@@ -163,9 +91,28 @@ pub fn try_fractionalize_nft(deps: Deps, _env: Env, msg: QueryMsg) {
           assets: Vec::new(),
       });
 
+      let mut asset_count: u64 = ASSET_COUNT.load(deps.storage).unwrap_or(0);
+
+      assets.assets.push(Asset {
+          token_address,
+          token_id,
+          total_fractions,
+          price_per_fraction,
+          available_fractions: total_fractions,
+          owner_address,
+      });
+
+    asset_count=asset_count+1;
+    
+    ASSET_COUNT.save(&mut deps.storage, &asset_count)?;
+    ASSETS.save(deps.storage, &assets)?;
+    deps.api.debug("nft fractionalized successfully");
+    Ok(Response::default().add_attribute_plaintext("asset_id", (asset_count-1).to_string()))
+
+    
 }
 
-pub fn try_send_fractions_to_evm( _deps: DepsMut,
+pub fn try_send_fractions( _deps: DepsMut,
     env: Env,
     info: MessageInfo,
     destination_chain: String,
@@ -237,11 +184,11 @@ pub fn try_send_fractions_to_evm( _deps: DepsMut,
     Ok(Response::new().add_message(cosmos_msg))
 }
 
-pub fn try_receive_fractions_from_evm(deps: Deps, _env: Env, msg: QueryMsg) {
+pub fn try_receive_fractions_from_evm(deps: DepsMut, _source_chain: String, _source_address: String, payload: Binary) {
     
 }
 
-pub fn try_list_fractions(deps: Deps, _env: Env, msg: QueryMsg) {
+pub fn try_list_fractions(deps: Deps, _env: Env, asset_id: usize, fractions: [u64; 4], active_time: u64,hash_data: Vec<u8>, signature: Vec<u8>, pub_key: Vec<u8>) {
     
 }
 

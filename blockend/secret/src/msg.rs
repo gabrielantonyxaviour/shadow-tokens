@@ -8,9 +8,9 @@ pub struct InstantiateMsg {}
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ExecuteMsg {
-    SendFractions {
-        source_chain: String,
-        source_address: String,
+    SendFractionsToEvm {
+        destination_chain: String,
+        destination_address: String,
         asset_id: usize,
         fractions: u128,
         hash_data: Vec<u8>,
@@ -22,19 +22,17 @@ pub enum ExecuteMsg {
         source_address: String,
         payload: Binary,
     },
-    TransferFractionsToEvm{
-        destination_chain: String,
-        destination_address: String,
-        asset_id: Vec<u8>,
-        total_fractions: u128,
-        signature: Vec<u8>,
-        pub_key: Vec<u8>,
+    SendFractionsToSecret{
+        source_chain: String,
+        source_address: String,
+        payload: Binary,
     },
     ListFractions{
         asset_id: Vec<u8>,
-        fractions: u128,
-        total_price: u128,
+        fractions: Vec<u8>,
+        total_price: Vec<u8>,
         active_time: u64,
+        hash_data: Vec<u8>,
         signature: Vec<u8>,
         pub_key: Vec<u8>,
     }

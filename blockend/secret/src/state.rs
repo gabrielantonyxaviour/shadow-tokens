@@ -36,8 +36,8 @@ pub struct Listings {
 }
 
 pub const STORED_MESSAGE: Item<MyMessage> = Item::new(b"stored_message");
-pub const LISTING_COUNT: Item<u128> = Item::new(b"listing_count");
-pub const ASSET_COUNT: Item<u128> = Item::new(b"asset_count");
+pub const LISTING_COUNT: Item<u64> = Item::new(b"listing_count");
+pub const ASSET_COUNT: Item<u64> = Item::new(b"asset_count");
 pub const LISTINGS: Item<Listings> = Item::new(b"listings");
 pub const ASSETS: Item<Assets> = Item::new(b"assets");
 
