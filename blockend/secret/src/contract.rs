@@ -1,6 +1,8 @@
 use cosmwasm_std::{
     entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
 };
+pub use secp256k1::constants::{COMPACT_SIGNATURE_SIZE as SIGNATURE_SIZE, MESSAGE_SIZE, UNCOMPRESSED_PUBLIC_KEY_SIZE};
+use secp256k1::ecdsa::Signature as SecpSignature;
 
 use crate::{
     errors::CustomContractError,
@@ -55,6 +57,8 @@ pub fn execute(
     }
 }
 
+
+
 pub fn send_message_evm(
     _deps: DepsMut,
     env: Env,
@@ -66,7 +70,7 @@ pub fn send_message_evm(
     // Message payload to be received by the destination
     let message_payload = encode(&vec![
         Token::String(info.sender.to_string()),
-        Token::String(message),
+        Token::Uint(10),
     ]);
 
     let coin = &info.funds[0];
@@ -114,25 +118,36 @@ pub fn receive_message_evm(
     _source_address: String,
     payload: Binary,
 ) -> Result<Response, CustomContractError> {
+    
     // decode the payload
     // executeMsgPayload: [sender, message]
     let decoded = decode(
-        &vec![ParamType::String, ParamType::String],
+        &vec![ParamType::Address, ParamType::Uint(256), ParamType::Uint(256), ParamType::Address],
         payload.as_slice(),
     )
     .unwrap();
 
-    // store message
-    STORED_MESSAGE.save(
-        deps.storage,
-        &MyMessage {
-            sender: decoded[0].to_string(),
-            message: decoded[1].to_string(),
-        },
-    )?;
 
     Ok(Response::new())
 }
+
+
+pub fn try_fractionalize_nft(deps: Deps, _env: Env, msg: QueryMsg) {
+
+}
+
+pub fn try_send_fractions_to_evm(deps: Deps, _env: Env, msg: QueryMsg) {
+
+}
+
+pub fn try_receive_fractions_from_evm(deps: Deps, _env: Env, msg: QueryMsg) {
+    
+}
+
+pub fn try_list_fractions(deps: Deps, _env: Env, msg: QueryMsg) {
+    
+}
+
 
 #[entry_point]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
