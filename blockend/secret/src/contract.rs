@@ -100,6 +100,7 @@ pub fn try_fractionalize_nft(deps: DepsMut, _source_chain: String, _source_addre
           price_per_fraction,
           available_fractions: total_fractions,
           owner_address,
+          owners: HashMap::new(),
       });
 
     asset_count=asset_count+1;
@@ -185,7 +186,64 @@ pub fn try_send_fractions( _deps: DepsMut,
 }
 
 pub fn try_receive_fractions_from_evm(deps: DepsMut, _source_chain: String, _source_address: String, payload: Binary) {
+    let decoded: Vec<Token>=decode(&vec![ParamType::Address, ParamType::Uint(256), ParamType::Uint(256), ParamType::Uint(256), ParamType::Address], payload.as_slice()).unwrap();
     
+    let asset_id: usize = convert_to_usize(decoded[0].clone().into_uint().unwrap());
+    let token_address: [u8; 20] = decoded[1].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
+    let token_id: [u64; 4] = decoded[2].clone().into_uint().unwrap();
+    let fractions: [u64; 4] = decoded[3].clone().into_uint().unwrap();
+    let owner_address: [u8; 20] = decoded[4].clone().into_fixed_bytes().unwrap().try_into().expect("Vec<u8> must have length 20");
+
+    let mut assets: Item<Assets> = ASSETS
+      .load(deps.storage)
+      .unwrap_or(Assets {
+          assets: Vec::new(),
+      });
+
+    let asset=assets.assets.get(asset_id).unwrap();
+    
+    assert_eq!(asset.token_address, token_address, "Token address does not match");
+    assert_eq!(asset.token_id, token_id, "Token id does not match");
+
+    let current_fractions=asset.owner.get(owner_address).unwrap_or([0,0,0,0]);
+    
+    asset.owners.insert(owner_address, add(current_fractions, fractions));
+}
+
+// pub fn try_mint_fractions()
+
+pub fn try_purchase_fractions(deps: DepsMut, _env: Env, asset_id: usize, fractions: [u64; 4], total_price: [u64; 4], hash_data: Vec<u8>, signature: Vec<u8>, pub_key: Vec<u8>) {
+    let user_address = public_key_to_address(pub_key);
+    
+    let mut assets: Item<Assets> = ASSETS
+      .load(deps.storage)
+      .unwrap_or(Assets {
+          assets: Vec::new(),
+      });
+
+    let asset=assets.assets.get(asset_id).unwrap();
+    let owner_address = asset.owner_address;
+
+    assert_eq!(user_address, owner_address,"Public key does not match the owner of the asset");
+
+    assert!(validate_signature(public_key, hash_data, signature),"Invalid signature");
+
+    let mut available_fractions = asset.available_fractions;
+    let mut total_price = asset.total_price;
+
+    for i in 0..4 {
+        assert!(fractions[i] <= available_fractions[i], "Not enough fractions available");
+        available_fractions[i] = available_fractions[i] - fractions[i];
+        total_price[i] = total_price[i] - total_price[i];
+    }
+
+    asset.available_fractions = available_fractions;
+    asset.total_price = total_price;
+
+    assets.assets[asset_id] = asset;
+    ASSETS.save(deps.storage, &assets)?;
+    deps.api.debug("Fractions purchased successfully");
+    Ok(Response::default())
 }
 
 pub fn try_list_fractions(deps: Deps, _env: Env, asset_id: usize, fractions: [u64; 4], active_time: u64,hash_data: Vec<u8>, signature: Vec<u8>, pub_key: Vec<u8>) {
@@ -245,6 +303,15 @@ fn public_key_to_address(public_key: Vec<u8>) -> [u8; 20] {
     address
 }
 
+fn convert_to_usize(array: [u64; 4]) -> usize{
+    // Concatenate the u64 values into a usize using bit-shifting
+    let combined_value: usize = (array[0] as usize) << 48
+        | (array[1] as usize) << 32
+        | (array[2] as usize) << 16
+        | (array[3] as usize);
+    combined_value
+}
+
 fn validate_signature(public_key: Vec<u8>, message: Vec<u8>, signature: Vec<u8>) -> bool {
     let secp = Secp256k1::new();
     let public_key = PublicKey::from_slice(&public_key).unwrap();
@@ -252,4 +319,20 @@ fn validate_signature(public_key: Vec<u8>, message: Vec<u8>, signature: Vec<u8>)
     let signature = Signature::from_compact(&signature).unwrap();
 
     secp.verify(&message, &signature, &public_key).is_ok()
+}
+
+
+fn add(array1: [u64; 4], array2: [u64; 4]) -> [u64; 4] {
+    // Add each corresponding element using iterators
+    let result: [u64; 4] = array1.iter().zip(array2.iter()).map(|(&a, &b)| a + b).collect::<Vec<_>>().try_into().unwrap();
+
+    println!("Result: {:?}", result);
+}
+
+
+fn sub(array1: [u64; 4], array2: [u64; 4]) -> [u64; 4] {
+    // Subtract each corresponding element using iterators
+    let result: [u64; 4] = array1.iter().zip(array2.iter()).map(|(&a, &b)| a - b).collect::<Vec<_>>().try_into().unwrap();
+
+    println!("Result: {:?}", result);
 }

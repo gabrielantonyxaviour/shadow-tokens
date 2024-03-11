@@ -16,6 +16,7 @@ pub struct Asset {
     pub price_per_fraction: [u64; 4],
     pub available_fractions: [u64; 4],
     pub owner_address: [u8; 32],
+    pub owners: HashMap<[u8; 32], [u64; 4]>
 }
 
 pub struct Assets {
@@ -34,6 +35,8 @@ pub struct Listing {
 pub struct Listings {
     pub listings: Vec<Listing>
 }
+
+
 
 pub const STORED_MESSAGE: Item<MyMessage> = Item::new(b"stored_message");
 pub const LISTING_COUNT: Item<u64> = Item::new(b"listing_count");

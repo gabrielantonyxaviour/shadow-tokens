@@ -56,12 +56,12 @@ contract ShadowProtocol is AxelarExecutable{
     }
     
 
-    function sendFractionsToSecret(address _nftContract, uint256 _tokenId, uint256 _fractions) external {
+    function sendFractionsToSecret(uint256 assetId, address _nftContract, uint256 _tokenId, uint256 _fractions) external {
         if(shadows.getFractions(msg.sender, _nftContract, _tokenId) < _fractions) revert InvalidFractions(_nftContract, msg.sender, _tokenId, _fractions);      
         shadows.burnFractions(msg.sender, _nftContract, _tokenId, _fractions);
 
         // send the fractions to the secret network
-        _send("send_fractions",abi.encode(_nftContract, _tokenId, _fractions, msg.sender));
+        _send("send_fractions_to_secret",abi.encode(assetId, _nftContract,  _tokenId, _fractions, msg.sender));
     }
 
     function _deployProxy(
